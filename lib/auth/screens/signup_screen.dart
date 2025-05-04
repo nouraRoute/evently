@@ -2,9 +2,9 @@ import 'package:evently/auth/screens/login_screen.dart';
 import 'package:evently/auth/widgets/auth_text_field.dart';
 import 'package:evently/common/app_assets.dart';
 import 'package:evently/common/app_colors.dart';
-import 'package:evently/common/custom_main_button.dart';
-import 'package:evently/common/custom_text_styles.dart';
-import 'package:evently/common/localization_switch.dart';
+import 'package:evently/common/widgets/custom_main_button.dart';
+import 'package:evently/common/widgets/custom_text_styles.dart';
+import 'package:evently/common/widgets/localization_switch.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -53,9 +53,9 @@ class SignupScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: RichText(
                     text: TextSpan(children: [
-                  const TextSpan(
+                  TextSpan(
                       text: "Already Have Account ?",
-                      style: CustomTextStyles.style16w500Black),
+                      style: Theme.of(context).textTheme.labelMedium),
                   TextSpan(
                     text: ' Login',
                     recognizer: TapGestureRecognizer()
