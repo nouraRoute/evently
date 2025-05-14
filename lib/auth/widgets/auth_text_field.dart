@@ -4,10 +4,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class AuthTextField extends StatefulWidget {
   const AuthTextField(
-      {super.key, required this.prefixIconPath, this.hintText, this.password});
+      {super.key,
+      required this.prefixIconPath,
+      this.hintText,
+      this.password,
+      this.controller});
   final String prefixIconPath;
   final String? hintText;
   final bool? password;
+  final TextEditingController? controller;
   @override
   State<AuthTextField> createState() => _AuthTextFieldState();
 }
@@ -20,6 +25,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        controller: widget.controller,
         obscureText: isObscure,
         decoration: InputDecoration(
             suffixIcon: widget.password == true

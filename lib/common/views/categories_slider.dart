@@ -7,13 +7,17 @@ import 'package:provider/provider.dart';
 
 class CategoriesSlider extends StatelessWidget {
   const CategoriesSlider(
-      {super.key, required this.categoryValues, required this.onSelect});
-  final CategoryValues categoryValues;
+      {super.key,
+      required this.categoryValues,
+      required this.onSelect,
+      this.invertColors = false});
+  final CategoryValues? categoryValues;
+  final bool invertColors;
   final void Function(CategoryValues) onSelect;
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeProvider>(context);
+    Provider.of<AppSettingsProvider>(context);
     return SizedBox(
         height: 50,
         child: ListView.separated(
@@ -33,13 +37,17 @@ class CategoriesSlider extends StatelessWidget {
                         ? Theme.of(context).colorScheme.brightness ==
                                 Brightness.dark
                             ? AppColors.mainColor
-                            : Theme.of(context).dividerColor
+                            : invertColors
+                                ? AppColors.mainColor
+                                : Theme.of(context).dividerColor
                         : null,
                     border: Border.all(
-                        color: context.watch<ThemeProvider>().themeMode ==
+                        color: context.watch<AppSettingsProvider>().themeMode ==
                                 ThemeMode.dark
                             ? AppColors.mainColor
-                            : AppColors.lightTextColor),
+                            : invertColors
+                                ? AppColors.mainColor
+                                : AppColors.lightTextColor),
                     borderRadius: BorderRadius.circular(46)),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,8 +58,12 @@ class CategoriesSlider extends StatelessWidget {
                           ? Theme.of(context).colorScheme.brightness ==
                                   Brightness.dark
                               ? AppColors.lightTextColor
-                              : AppColors.mainColor
-                          : Theme.of(context).dividerColor,
+                              : invertColors
+                                  ? AppColors.lightTextColor
+                                  : AppColors.mainColor
+                          : invertColors
+                              ? AppColors.mainColor
+                              : Theme.of(context).dividerColor,
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -62,8 +74,12 @@ class CategoriesSlider extends StatelessWidget {
                                   ? Theme.of(context).colorScheme.brightness ==
                                           Brightness.dark
                                       ? AppColors.lightTextColor
-                                      : AppColors.mainColor
-                                  : Theme.of(context).dividerColor),
+                                      : invertColors
+                                          ? AppColors.lightTextColor
+                                          : AppColors.mainColor
+                                  : invertColors
+                                      ? AppColors.mainColor
+                                      : Theme.of(context).dividerColor),
                     )
                   ],
                 ),

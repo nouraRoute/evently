@@ -40,16 +40,34 @@ enum CategoryValues {
     return name[0].toUpperCase() + name.substring(1);
   }
 
-  String getDesign() {
+  String getDesign({bool? isDark}) {
     switch (this) {
       case CategoryValues.all:
-        return '';
+        return AppAssets.categoryAllDesign;
       case CategoryValues.sport:
         return AppAssets.categorySportDesign;
       case CategoryValues.birthdays:
         return AppAssets.categoryBirthdayDesign;
       case CategoryValues.bookClub:
-        return AppAssets.categoryBookClubDesign;
+        return isDark == true
+            ? AppAssets.blueBookClub
+            : AppAssets.categoryBookClubDesign;
     }
+  }
+
+  static CategoryValues fromJson(String json) {
+    if (json == sport.name) {
+      return sport;
+    } else if (json == birthdays.name) {
+      return birthdays;
+    } else if (json == bookClub.name) {
+      return bookClub;
+    } else {
+      return all;
+    }
+  }
+
+  String toJson() {
+    return name;
   }
 }

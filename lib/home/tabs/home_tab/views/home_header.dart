@@ -1,7 +1,10 @@
+import 'package:evently/auth/provider/auth_provider.dart';
 import 'package:evently/common/app_colors.dart';
 import 'package:evently/common/views/categories_slider.dart';
 import 'package:evently/common/widgets/custom_text_styles.dart';
+import 'package:evently/home/tabs/home_tab/provider/home_tab_provider.dart';
 import 'package:evently/models/category_model.dart';
+import 'package:evently/models/user_model.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,14 +17,18 @@ class HomeHeader extends StatefulWidget {
 }
 
 class _HomeHeaderState extends State<HomeHeader> {
-  CategoryValues selectedId = CategoryModel.categories.first.categoryValues;
   @override
   Widget build(BuildContext context) {
+    UserModel? userModel = context.watch<UserAuthProvider>().userModel;
+    CategoryValues? selectedId =
+        context.watch<HomeTabProvider>().selectedCategory;
+
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
           color: Theme.of(context).highlightColor,
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(24))),
+          borderRadius:
+              const BorderRadius.vertical(bottom: Radius.circular(24))),
       child: SafeArea(
         child: Column(
           children: [
@@ -37,7 +44,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                           .copyWith(color: Theme.of(context).dividerColor),
                     ),
                     Text(
-                      'John Safwat',
+                      userModel?.name ?? '',
                       style: CustomTextStyles.style18w700White.copyWith(
                           fontSize: 24, color: Theme.of(context).dividerColor),
                     ) //TODO:edit
@@ -55,21 +62,21 @@ class _HomeHeaderState extends State<HomeHeader> {
                     ) //TODO:edit
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 SizedBox(
                   width: 35,
                   height: 35,
                   child: IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        context.read<ThemeProvider>().changeAppTheme();
+                        context.read<AppSettingsProvider>().changeAppTheme();
                       },
                       icon: Icon(
                         Icons.wb_sunny_outlined,
                         color: Theme.of(context).dividerColor,
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 SizedBox(
@@ -77,13 +84,18 @@ class _HomeHeaderState extends State<HomeHeader> {
                   height: 35,
                   child: FilledButton(
                       style: FilledButton.styleFrom(
-                          padding: EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
                           backgroundColor: Theme.of(context).dividerColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8))),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<AppSettingsProvider>().changeLocale();
+                      },
                       child: Text(
-                        'EN',
+                        context
+                            .watch<AppSettingsProvider>()
+                            .getAppLocalString()
+                            .toUpperCase(),
                         style: CustomTextStyles.style14w700Black
                             .copyWith(color: AppColors.mainColor),
                       )),
@@ -91,14 +103,11 @@ class _HomeHeaderState extends State<HomeHeader> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20.0),
+              padding: const EdgeInsets.only(top: 20.0),
               child: CategoriesSlider(
                 categoryValues: selectedId,
                 onSelect: (p0) {
-                  setState(() {
-                    selectedId = p0;
-                  });
-                  print('XXX=>$selectedId');
+                  context.read<HomeTabProvider>().editSelectedCategory(p0);
                 },
               ),
             )

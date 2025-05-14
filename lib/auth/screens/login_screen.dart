@@ -1,3 +1,4 @@
+import 'package:evently/auth/provider/auth_provider.dart';
 import 'package:evently/auth/screens/signup_screen.dart';
 import 'package:evently/auth/widgets/auth_text_field.dart';
 import 'package:evently/common/app_assets.dart';
@@ -8,13 +9,21 @@ import 'package:evently/common/widgets/custom_text_styles.dart';
 import 'package:evently/common/widgets/localization_switch.dart';
 import 'package:evently/home/main_layer_screen.dart';
 import 'package:flutter/gestures.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   static const String routeName = '/loginScreen';
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,11 +41,13 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              const AuthTextField(
+              AuthTextField(
+                controller: emailController,
                 prefixIconPath: AppAssets.emailIcon,
                 hintText: 'Email', //TODO:localization
               ),
-              const AuthTextField(
+              AuthTextField(
+                controller: passwordController,
                 password: true,
                 prefixIconPath: AppAssets.passwordIcon,
                 hintText: 'Password', //TODO:localization
@@ -56,11 +67,50 @@ class LoginScreen extends StatelessWidget {
                       )),
                 ],
               ),
-              CustomMainButton(
-                title: 'Login',
-                onPressed: () => Navigator.of(context)
-                    .pushNamed(MainLayerScreen.routeName), //TODO:edit
-              ),
+              context.watch<UserAuthProvider>().loading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : CustomMainButton(
+                      title: 'Login',
+                      onPressed: () {
+                        print('XXXXX');
+                        // Navigator.of(context)
+                        //   .pushNamed(MainLayerScreen.routeName);
+
+                        context
+                            .read<UserAuthProvider>()
+                            .userLogin(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim())
+                            .then(
+                          (value) {
+                            if (value == null) {
+                              Navigator.of(context)
+                                  .pushNamed(MainLayerScreen.routeName);
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                  'user logedIn successfly:${context.read<UserAuthProvider>().userModel?.name}',
+                                  style: CustomTextStyles.style18w500White,
+                                ),
+                                backgroundColor: Colors.green,
+                              ));
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                  value,
+                                  style: CustomTextStyles.style18w500White,
+                                ),
+                                backgroundColor: Colors.red,
+                              ));
+                            }
+                          },
+                        );
+                      }, //TODO:edit
+                    ),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),

@@ -28,7 +28,10 @@ class AppTheme {
         elevation: 0,
         centerTitle: true,
         titleTextStyle: TextStyle(
-            fontFamily: 'Rag', fontSize: 22, fontWeight: FontWeight.w500),
+            color: AppColors.mainColor,
+            fontFamily: 'Rag',
+            fontSize: 22,
+            fontWeight: FontWeight.w500),
         iconTheme: IconThemeData(color: AppColors.mainColor),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(

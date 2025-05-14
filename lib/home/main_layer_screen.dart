@@ -1,5 +1,11 @@
+import 'package:evently/auth/provider/auth_provider.dart';
+import 'package:evently/events/create_event_page.dart';
+import 'package:evently/home/tabs/fav_events_tab/fav_events_tab.dart';
 import 'package:evently/home/tabs/home_tab/home_tab.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainLayerScreen extends StatefulWidget {
   const MainLayerScreen({super.key});
@@ -9,8 +15,18 @@ class MainLayerScreen extends StatefulWidget {
 }
 
 class _MainLayerScreenState extends State<MainLayerScreen> {
-  List<Widget> tabs = [HomeTab(), Container(), Container(), Container()];
+  List<Widget> tabs = [HomeTab(), Container(), FavEventsTab(), Container()];
   int index = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (context.read<UserAuthProvider>().userModel == null &&
+        FirebaseAuth.instance.currentUser != null) {
+      context.read<UserAuthProvider>().getUser();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +37,9 @@ class _MainLayerScreenState extends State<MainLayerScreen> {
             shape: BoxShape.circle,
             border: Border.all(color: Colors.white, width: 5)),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(CreateEventPage.routeName);
+          },
           child: Icon(
             Icons.add,
             color: Colors.white,
@@ -48,19 +66,19 @@ class _MainLayerScreenState extends State<MainLayerScreen> {
               BottomNavigationBarItem(
                   activeIcon: Icon(Icons.home),
                   icon: Icon(Icons.home_outlined),
-                  label: 'Home'), //TODO:localiztion
+                  label: AppLocalizations.of(context)!.home), //TODO:localiztion
               BottomNavigationBarItem(
                   activeIcon: Icon(Icons.location_on),
                   icon: Icon(Icons.location_on_outlined),
-                  label: 'Map'),
+                  label: AppLocalizations.of(context)!.map),
               BottomNavigationBarItem(
                   activeIcon: Icon(Icons.favorite),
                   icon: Icon(Icons.favorite_border),
-                  label: 'Love'),
+                  label: AppLocalizations.of(context)!.love),
               BottomNavigationBarItem(
                   activeIcon: Icon(Icons.person),
                   icon: Icon(Icons.person_outline_rounded),
-                  label: 'Profile'),
+                  label: AppLocalizations.of(context)!.profile),
             ]),
       ),
     );

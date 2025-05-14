@@ -7,8 +7,10 @@ class AppAssets {
   static const String egIcon = 'assets/icons/EG_icon.png';
   static const String lrIcon = 'assets/icons/LR_icon.png';
   static const String categorySportDesign = 'assets/category_designs/sport.png';
+  static const String blueBookClub = 'assets/category_designs/blueBookClub.png';
   static const String categoryBirthdayDesign =
       'assets/category_designs/birthday.png';
   static const String categoryBookClubDesign =
       'assets/category_designs/bookClub.png';
+  static const String categoryAllDesign = 'assets/category_designs/all.png';
 }
