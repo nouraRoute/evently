@@ -2,6 +2,7 @@ import 'package:evently/auth/provider/auth_provider.dart';
 import 'package:evently/events/create_event_page.dart';
 import 'package:evently/home/tabs/fav_events_tab/fav_events_tab.dart';
 import 'package:evently/home/tabs/home_tab/home_tab.dart';
+import 'package:evently/home/tabs/profile_tab/profile_tab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ class MainLayerScreen extends StatefulWidget {
 }
 
 class _MainLayerScreenState extends State<MainLayerScreen> {
-  List<Widget> tabs = [HomeTab(), Container(), FavEventsTab(), Container()];
+  List<Widget> tabs = [HomeTab(), Container(), FavEventsTab(), ProfileTab()];
   int index = 0;
   @override
   void initState() {

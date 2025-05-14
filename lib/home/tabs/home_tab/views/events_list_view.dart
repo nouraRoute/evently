@@ -11,29 +11,30 @@ class EventsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var selectedCategory = context.watch<HomeTabProvider>().selectedCategory;
-    return StreamBuilder(
-      stream:
-          FirebaseSerices.getAllEventsStream(categoryValue: selectedCategory),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text(snapshot.error.toString()),
-          );
-        } else {
-          var data = snapshot.data ?? [];
-          return Expanded(
-              child: ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: data.length,
-            itemBuilder: (context, index) =>
-                EventCard(eventDataModel: data[index]),
-          ));
-        }
-      },
+    return Expanded(
+      child: StreamBuilder(
+        stream:
+            FirebaseSerices.getAllEventsStream(categoryValue: selectedCategory),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          } else {
+            var data = snapshot.data ?? [];
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: data.length,
+              itemBuilder: (context, index) =>
+                  EventCard(eventDataModel: data[index]),
+            );
+          }
+        },
+      ),
     );
   }
 }
